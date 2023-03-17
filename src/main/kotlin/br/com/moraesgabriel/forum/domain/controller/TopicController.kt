@@ -5,6 +5,7 @@ import br.com.moraesgabriel.forum.domain.model.Topic
 import br.com.moraesgabriel.forum.domain.model.User
 import br.com.moraesgabriel.forum.domain.service.TopicService
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
@@ -16,5 +17,10 @@ class TopicController(private val topicService: TopicService) {
     @GetMapping
     fun list(): List<Topic> {
         return topicService.list()
+    }
+
+    @GetMapping("/{id}")
+    fun getTopicById(@PathVariable id: Long): Topic {
+        return topicService.getTopicById(id)
     }
 }

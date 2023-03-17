@@ -7,13 +7,14 @@ import org.springframework.stereotype.Service
 
 
 @Service
-class TopicService {
-    fun list(): List<Topic> {
-        val topicList = List(3) {
+class TopicService(private var topics: List<Topic>) {
+
+    init {
+        topics = List(3) {
             Topic(
                     id = it.toLong(),
-                    title = "Duvida Kotlin",
-                    message = "Variaveis no Kotlin",
+                    title = "Duvida Kotlin $it",
+                    message = "Variaveis no Kotlin $it",
                     course = Course(
                             id = it.toLong(),
                             name = "Kotlin",
@@ -21,12 +22,19 @@ class TopicService {
                     ),
                     author = User(
                             id = it.toLong(),
-                            name = "Ana da Silva",
+                            name = "Ana da Silva $it",
                             email = "ana@email.com"
                     )
             )
         }
+    }
+    fun list(): List<Topic> {
+        return topics
+    }
 
-        return topicList
+    fun getTopicById(id: Long): Topic {
+        return topics.first { topic ->
+            topic.id == id
+        }
     }
 }
