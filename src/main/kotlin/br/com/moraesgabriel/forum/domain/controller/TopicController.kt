@@ -1,26 +1,32 @@
 package br.com.moraesgabriel.forum.domain.controller
 
+import br.com.moraesgabriel.forum.domain.dto.TopicDTO
+import br.com.moraesgabriel.forum.domain.dto.TopicView
 import br.com.moraesgabriel.forum.domain.model.Course
 import br.com.moraesgabriel.forum.domain.model.Topic
 import br.com.moraesgabriel.forum.domain.model.User
 import br.com.moraesgabriel.forum.domain.service.TopicService
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import jakarta.validation.Valid
+import org.springframework.web.bind.annotation.*
 
 
 @RestController
-@RequestMapping("topics")
+@RequestMapping("/topics")
 class TopicController(private val topicService: TopicService) {
 
     @GetMapping
-    fun list(): List<Topic> {
+    fun list(): List<TopicView> {
         return topicService.list()
     }
 
     @GetMapping("/{id}")
-    fun getTopicById(@PathVariable id: Long): Topic {
+    fun getTopicById(@PathVariable id: Long): TopicView {
         return topicService.getTopicById(id)
+    }
+
+
+    @PostMapping
+    fun register(@RequestBody @Valid topic: TopicDTO) {
+        topicService.register(topic)
     }
 }
