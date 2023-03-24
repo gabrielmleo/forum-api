@@ -1,5 +1,7 @@
 package br.com.moraesgabriel.forum.domain.service
 
+import br.com.moraesgabriel.forum.domain.dto.AnswerDTO
+import br.com.moraesgabriel.forum.domain.mapper.AnswerDtoMapper
 import br.com.moraesgabriel.forum.domain.model.Answer
 import br.com.moraesgabriel.forum.domain.model.Course
 import br.com.moraesgabriel.forum.domain.model.Topic
@@ -9,10 +11,12 @@ import org.springframework.stereotype.Service
 
 
 @Service
-class AnswerService(private var answer: List<Answer>) {
+class AnswerService(
+    private var answer: MutableList<Answer>,
+    private val answerDtoMapper: AnswerDtoMapper) {
 
     init {
-        answer = List(2) {
+        answer = MutableList(2) {
             Answer(
                     id = it.toLong(),
                     message = "This is a answer $it",
@@ -45,5 +49,17 @@ class AnswerService(private var answer: List<Answer>) {
         return answer.filter {
             it.topic.id == id
         }
+    }
+
+    fun register(topic: Topic,author: User, answerDTO: AnswerDTO) {
+        val answerId = (answer.size + 1).toLong()
+        answer.add(
+            answerDtoMapper.map(
+                topic = topic,
+                author = author,
+                answerDTO = answerDTO,
+                answerId = answerId
+            )
+        )
     }
 }

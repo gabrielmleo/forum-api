@@ -21,7 +21,7 @@ class TopicController(private val topicService: TopicService) {
 
     @GetMapping("/{id}")
     fun getTopicById(@PathVariable id: Long): TopicView {
-        return topicService.getTopicById(id)
+        return topicService.getTopicViewById(id)
     }
 
 

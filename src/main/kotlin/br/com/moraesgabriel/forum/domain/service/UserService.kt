@@ -16,7 +16,7 @@ class UserService(private var authors: List<User>) {
         }
     }
 
-    fun findCourseById(id: Long): User {
+    fun findAuthorById(id: Long): User {
         return this.authors.first {
             it.id == id
         }

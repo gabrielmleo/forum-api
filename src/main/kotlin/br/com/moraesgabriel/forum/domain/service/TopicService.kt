@@ -23,11 +23,17 @@ class TopicService(
         }
     }
 
-    fun getTopicById(id: Long): TopicView {
+    fun getTopicViewById(id: Long): TopicView {
         return topics.first { topic ->
             topic.id == id
         }.let {
             topicViewMapper.map(it)
+        }
+    }
+
+    fun getTopicById(id: Long): Topic {
+        return topics.first { topic ->
+            topic.id == id
         }
     }
 
@@ -37,7 +43,7 @@ class TopicService(
                         t = topicDto,
                         id = topics.size.toLong() + 1,
                         course = courseService.findCourseById(topicDto.idCourse),
-                        author = userService.findCourseById(topicDto.idAuthor)
+                        author = userService.findAuthorById(topicDto.idAuthor)
                 )
         )
     }
