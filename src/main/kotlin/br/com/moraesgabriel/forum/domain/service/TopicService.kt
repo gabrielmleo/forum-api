@@ -1,6 +1,7 @@
 package br.com.moraesgabriel.forum.domain.service
 
 import br.com.moraesgabriel.forum.domain.dto.TopicDTO
+import br.com.moraesgabriel.forum.domain.dto.TopicUpdateDTO
 import br.com.moraesgabriel.forum.domain.dto.TopicView
 import br.com.moraesgabriel.forum.domain.mapper.TopicDtoMapper
 import br.com.moraesgabriel.forum.domain.mapper.TopicViewMapper
@@ -46,5 +47,23 @@ class TopicService(
                         author = userService.findAuthorById(topicDto.idAuthor)
                 )
         )
+    }
+
+    fun update(topicUpdate: TopicUpdateDTO) {
+        val oldTopic: Topic = topics.first {
+            it.id == topicUpdate.id
+        }
+        val newTopic = Topic(
+            id = topicUpdate.id
+            , title = topicUpdate.title,
+            message = topicUpdate.message,
+            creationDate = oldTopic.creationDate,
+            course = oldTopic.course,
+            author = oldTopic.author,
+            status = oldTopic.status,
+            answers = oldTopic.answers
+        )
+        topics.remove(oldTopic)
+        topics.add(newTopic)
     }
 }

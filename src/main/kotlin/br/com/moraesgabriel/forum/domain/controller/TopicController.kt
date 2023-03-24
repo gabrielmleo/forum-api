@@ -1,6 +1,7 @@
 package br.com.moraesgabriel.forum.domain.controller
 
 import br.com.moraesgabriel.forum.domain.dto.TopicDTO
+import br.com.moraesgabriel.forum.domain.dto.TopicUpdateDTO
 import br.com.moraesgabriel.forum.domain.dto.TopicView
 import br.com.moraesgabriel.forum.domain.model.Course
 import br.com.moraesgabriel.forum.domain.model.Topic
@@ -28,5 +29,10 @@ class TopicController(private val topicService: TopicService) {
     @PostMapping
     fun register(@RequestBody @Valid topic: TopicDTO) {
         topicService.register(topic)
+    }
+
+    @PutMapping
+    fun update(@RequestBody @Valid topicUpdate: TopicUpdateDTO) {
+        topicService.update(topicUpdate)
     }
 }
