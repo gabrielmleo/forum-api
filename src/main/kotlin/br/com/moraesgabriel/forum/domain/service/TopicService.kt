@@ -38,18 +38,18 @@ class TopicService(
         }
     }
 
-    fun register(topicDto: TopicDTO) {
-        topics.add(
-                topicDtoMapper.map(
-                        t = topicDto,
-                        id = topics.size.toLong() + 1,
-                        course = courseService.findCourseById(topicDto.idCourse),
-                        author = userService.findAuthorById(topicDto.idAuthor)
-                )
+    fun register(topicDto: TopicDTO): TopicView {
+        val topic = topicDtoMapper.map(
+            t = topicDto,
+            id = topics.size.toLong() + 1,
+            course = courseService.findCourseById(topicDto.idCourse),
+            author = userService.findAuthorById(topicDto.idAuthor)
         )
+        topics.add(topic)
+        return topicViewMapper.map(topic)
     }
 
-    fun update(topicUpdate: TopicUpdateDTO) {
+    fun update(topicUpdate: TopicUpdateDTO): TopicView {
         val oldTopic: Topic = topics.first {
             it.id == topicUpdate.id
         }
@@ -65,5 +65,14 @@ class TopicService(
         )
         topics.remove(oldTopic)
         topics.add(newTopic)
+        return topicViewMapper.map(newTopic)
+    }
+
+    fun deleteTopicById(id: Long) {
+        val oldTopic = topics.first {
+            it.id == id
+        }
+
+        topics.remove(oldTopic)
     }
 }

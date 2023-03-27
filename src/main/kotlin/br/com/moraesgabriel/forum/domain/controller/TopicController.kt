@@ -8,7 +8,10 @@ import br.com.moraesgabriel.forum.domain.model.Topic
 import br.com.moraesgabriel.forum.domain.model.User
 import br.com.moraesgabriel.forum.domain.service.TopicService
 import jakarta.validation.Valid
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.util.UriComponentsBuilder
 
 
 @RestController
@@ -27,12 +30,24 @@ class TopicController(private val topicService: TopicService) {
 
 
     @PostMapping
-    fun register(@RequestBody @Valid topic: TopicDTO) {
-        topicService.register(topic)
+    fun register(
+        @RequestBody @Valid topic: TopicDTO,
+        uriBuilder: UriComponentsBuilder
+    ): ResponseEntity<TopicView> {
+        val topicView = topicService.register(topic)
+        val uri = uriBuilder.path("topics/${topicView.id}").build().toUri()
+        return ResponseEntity.created(uri).body(topicView)
     }
 
     @PutMapping
-    fun update(@RequestBody @Valid topicUpdate: TopicUpdateDTO) {
-        topicService.update(topicUpdate)
+    fun update(@RequestBody @Valid topicUpdate: TopicUpdateDTO): ResponseEntity<TopicView> {
+        val topicUpdated = topicService.update(topicUpdate)
+        return ResponseEntity.ok(topicUpdated)
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    fun delete(@PathVariable id: Long) {
+        topicService.deleteTopicById(id)
     }
 }
